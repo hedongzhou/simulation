@@ -11,8 +11,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * @author hedongzhou
  * @date 2018/11/17
  */
-@SpringBootApplication
-@ComponentScan(basePackages = { "com.simulation.my" })
+@SpringBootApplication(scanBasePackages = {"com.simulation.my"})
 @EnableAspectJAutoProxy
 public class Application {
 
