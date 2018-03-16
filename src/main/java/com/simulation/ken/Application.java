@@ -1,17 +1,14 @@
-package com.simulation.my;
+package com.simulation.ken;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * 启动类
  *
- * @author hedongzhou
- * @date 2018/11/17
  */
-@SpringBootApplication(scanBasePackages = {"com.simulation.my"})
+@SpringBootApplication(scanBasePackages = {"com.simulation.ken"})
 @EnableAspectJAutoProxy
 public class Application {
 
