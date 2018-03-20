@@ -5,8 +5,10 @@ package com.simulation.lenjor.aspect;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -21,16 +23,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class HttpAspect {
 	
 	private final static Logger logger = LoggerFactory.getLogger(HttpAspect.class);
-	private Long startTime = 0L;
-	private Long endTime = 0L;
 	//声明切入点，可以减少代码冗余度
-		@Pointcut("execution(public * com.simulation.lenjor.controller.IndexController.*(..))")
-		public void log() {	
-		}
-		@Before("log()")
-		public void doBefore(JoinPoint joinPoint) {
+		@Around("execution(public * com.simulation.lenjor.controller.IndexController.*(..))")
+		public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
 			logger.info("接收http之前");
-			startTime = System.currentTimeMillis();
+			Long startTime = System.currentTimeMillis();
 			logger.info("开始时间 :"+startTime);
 			ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 			HttpServletRequest request = (HttpServletRequest) attributes.getRequest();
@@ -44,24 +41,18 @@ public class HttpAspect {
 			logger.info("class_method={}",joinPoint.getSignature().getDeclaringTypeName()+"."
 					+joinPoint.getSignature().getName());
 			//参数
-			logger.info("args={}",joinPoint.getArgs());
+			Object[]  args = joinPoint.getArgs();
+	         for(Object arg:args){
+	        	 logger.info("args={}",arg);
+	         }
 			
-		}
-		@After("log()")
-		public void doAfter() {
+			Object object = joinPoint.proceed();  //代理返回值
 			logger.info("处理完http之后");
-			endTime = System.currentTimeMillis();
+			Long endTime = System.currentTimeMillis();
 			logger.info("结束时间 :"+endTime);
-			double costTime = (endTime-startTime)/60.0;
-			logger.info("耗时："+ costTime);
+			Long costTime = endTime-startTime;
+			logger.info("耗时："+ costTime + "ms");
+			return object;
 		}
 
-		/**
-		 * 获取返回的内容
-		 * @param object
-		 */
-	    @AfterReturning(returning = "object", pointcut = "log()")
-	    public void doAfterReturning(Object object) {
-	        logger.info("response={}", object.toString());
-	    }
 }
