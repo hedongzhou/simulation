@@ -8,7 +8,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * 启动类
  *
  */
-@SpringBootApplication(scanBasePackages = {"com.simulation.ken"})
+@SpringBootApplication(scanBasePackages = { "com.simulation.ken" })
 @EnableAspectJAutoProxy
 public class Application {
 
